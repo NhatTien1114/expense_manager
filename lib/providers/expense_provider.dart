@@ -76,7 +76,7 @@ class ExpenseProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  void removeExpense(int id) {
+  void removeExpense(String id) {
     _expense.removeWhere((e) => e.id == id);
     _saveExpenseToStorage();
     notifyListeners();
