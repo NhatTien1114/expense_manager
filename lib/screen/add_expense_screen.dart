@@ -55,23 +55,21 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             buildTextField(_payeeController, 'Payee', TextInputType.text),
             buildTextField(_noteController, 'note', TextInputType.text),
             buildDateField(_selectedDate),
-            // buildCategoryDropdown(expenseProvider),
-            // buildTagDropdown(expenseProvider),
             Padding(
               padding: const EdgeInsets.only(
-                  bottom: 8.0), // Adjust the padding as needed
+                  bottom: 8.0),
               child: buildCategoryDropdown(expenseProvider),
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  bottom: 8.0), // Adjust the padding as needed
+                  bottom: 8.0),
               child: buildTagDropdown(expenseProvider),
             ),
           ],
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(16.0),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.deepPurple,
@@ -84,7 +82,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       ),
     );
   }
-  // Helper methods for building the form elements go here (omitted for brevity)
 
   void _saveExpense() {
     if (_amountController.text.isEmpty) {
@@ -92,7 +89,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           SnackBar(content: Text('Please fill in all required fields!')));
       return;
     }
-
     final expense = Expense(
       id: widget.initialExpense?.id ??
           DateTime.now().toString(), // Assuming you generate IDs like this
@@ -110,9 +106,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     Navigator.pop(context);
   }
 
-  // Helper method to build a text field
-  Widget buildTextField(
-      TextEditingController controller, String label, TextInputType type) {
+  Widget buildTextField(TextEditingController controller, String label, TextInputType type) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(
@@ -195,8 +189,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             context: context,
             builder: (context) => AddTagDialog(onAdd: (newTag) {
               provider.addTag(newTag); // Assuming you have an `addTag` method.
-              setState(
-                      () => _selectedTagId = newTag.id); // Update selected tag ID
+              setState(() => _selectedTagId = newTag.id); // Update selected tag ID
             }),
           );
         } else {

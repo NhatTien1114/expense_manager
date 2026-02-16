@@ -7,9 +7,7 @@ import 'dart:convert';
 
 class ExpenseProvider with ChangeNotifier{
   final LocalStorage storage;
-  List<Expense> _expense = [];
-
-  List<Expense> get expense => _expense;
+  List<Expense> _expenses = [];
 
   final List<Category> _categories = [
     Category(id: '1', name: 'Food', isDefault: true),
@@ -37,47 +35,45 @@ class ExpenseProvider with ChangeNotifier{
     Tag(id: '15', name: 'Streaming'),
   ];
 
-  List<Expense> get expenses => _expense;
+  List<Expense> get expenses => _expenses;
   List<Category> get categories => _categories;
   List<Tag> get tags => _tags;
 
   ExpenseProvider(this.storage) {
-    _loadExpesesFromStorage();
+    _loadExpenseFromStorage();
   }
 
-  void _loadExpesesFromStorage() async{
-    var storedExpenses = storage.getItem('expenses');
-    if (storedExpenses != null) {
-      _expense = List<Expense>.from(
-          (storedExpenses as List).map((item) => Expense.fromJson(item))
-      );
+  void _loadExpenseFromStorage() async{
+    final storedData = await storage.getItem('expenses') as List?;
+    if (storedData != null) {
+      _expenses = storedData.map((item) => Expense.fromJson(item)).toList();
       notifyListeners();
     }
   }
 
   void _saveExpenseToStorage() {
-    storage.setItem('expenses', jsonEncode(_expense.map((e) => e.toJson()).toList()));
+    storage.setItem('expenses', jsonEncode(_expenses.map((e) => e.toJson()).toList()));
   }
 
   void addExpense(Expense expense) {
-    _expense.add(expense);
+    _expenses.add(expense);
     _saveExpenseToStorage();
     notifyListeners();
   }
 
   void addOrUpdateExpense(Expense expense) {
-    int index = _expense.indexWhere((e) => e.id == expense.id);
+    int index = _expenses.indexWhere((e) => e.id == expense.id);
     if (index != -1) {
-      _expense[index] = expense;
+      _expenses[index] = expense;
     } else {
-      _expense.add(expense);
+      _expenses.add(expense);
     }
     _saveExpenseToStorage();
     notifyListeners();
   }
 
   void removeExpense(String id) {
-    _expense.removeWhere((e) => e.id == id);
+    _expenses.removeWhere((e) => e.id == id);
     _saveExpenseToStorage();
     notifyListeners();
   }
